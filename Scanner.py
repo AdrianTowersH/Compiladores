@@ -9,6 +9,30 @@ Accept = [15, 16, 17, 18, 19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,
 # Definir un arreglo con los estados de error
 Error = [39,40,41,42] 
 
+Keywords = {
+    43: 'program',
+    44: 'procedure',
+    45: 'function',
+    46: 'begin',
+    47: 'end',
+    48: 'var',
+    49: 'integer',
+    50: 'real',
+    51: 'string',
+    52: 'array',
+    53: 'of',
+    54: 'if',
+    55: 'then',
+    56: 'else',
+    57: 'repeat',
+    58: 'until',
+    59: 'for',
+    60: 'to',
+    61: 'do',
+    62: 'readLn',
+    63: 'writeLn'
+}
+
 def error_message(state):
        if state== 39:
               print(f"Simbolo de asignación := mal asignado.")

@@ -94,7 +94,7 @@ def transition_table(state, ch):
                 elif  ch== '}':  #inicio de estados de error
                         state=41
                         return state
-                elif  ch.isdigit() or ch in '!¡@#$%^&|"¿?':
+                elif   ch in '!¡@#$%^&|"¿?':
                         state=42
                         return state           #fin del estado cero
                 else :

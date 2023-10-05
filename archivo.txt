@@ -1,1 +1,5 @@
-hola
+{ Example #2 }		
+program Ejemplo2;
+var
+a: integer;
+b: real;

@@ -33,6 +33,9 @@ Keywords = {
     63: 'writeLn'
 }
 
+def record_token (state,ch):
+       print("esta en llamas")
+
 def error_message(state):
        if state== 39:
               print(f"Simbolo de asignación := mal asignado.")
@@ -183,7 +186,7 @@ def transition_table(state, ch):
                 else:
                         return -8
             elif (state==8 ):
-                if (ch.isalpha() or ch.isdigit() or  ch.isspace() or ch in '<>(=:+-/;,.)[]{' or  ch== "'"): #inicio estado 8 estado no aceptor
+                if (ch.isalpha() or ch.isdigit() or  ch.isspace() or ch in '<>(=:+-/;,.)[]{' or  ch== "'" or ch in '!¡@#$%^&|"¿?'): #inicio estado 8 estado no aceptor
                         state=8
                         return state
                 elif  ch== '*': 
@@ -192,7 +195,7 @@ def transition_table(state, ch):
                 else:
                         return -9
             elif (state==9):    
-                if (ch.isalpha() or ch.isdigit() or  ch.isspace() or ch in '<>(=:+-*/;,.[]{' or  ch== "'"): #inicio estado 9 estado no aceptor
+                if (ch.isalpha() or ch.isdigit() or  ch.isspace() or ch in '<>(=:+-*/;,.[]{' or  ch== "'" or ch in '!¡@#$%^&|"¿?'): #inicio estado 9 estado no aceptor
                         state=8
                         return state
                 elif ch== ')': #estado aceptor
@@ -241,8 +244,9 @@ def transition_table(state, ch):
                 else:
                     return -14  
             elif (state==14): 
-                if (ch.isalpha() or ch.isdigit() or  ch==' ' or ch in '<>(=:+-*/;,.)[]'):  #inicio estado 14 estado no aceptor
+                if (ch.isalpha() or ch.isdigit() or  ch==' ' or ch in '<>(=:+-*/;,.)[]' or  ch== "'" or ch in '!¡@#$%^&|"¿?'):  #inicio estado 14 estado no aceptor
                         state=14
+                        return state
                 elif  ch==  '}':           #estado aceptor
                         state=38
                         return state
@@ -262,9 +266,42 @@ print(output)
 
 """
 
+def scanner():
+    with open('archivo.txt') as file:
+        while True:
+          # leer un archivo
+          ch = file.read(1)
 
+          if not ch:
+                 break
+          
+          state =0 #iniciamos el DFA
+          word=""
+
+          # Bucle para recorrer la tabla de transición hasta que no esté en ninguno de los arreglos de aceptor y de error
+          while state not in Accept and state not in Error:
+                 #print(state, ch)
+                 state=transition_table(state, ch)
+
+                 if state in Advance:
+                        #print(f"está en el arreglo Advance.") 
+                        word=word+ch
+                        ch= file.read(1)
+                        #print(word)
+          if state in Accept:  # Verificar si el estado está en el arreglo aceptor 
+              print("Estado ",state,"letra ",ch, "cadena de palabra ", word) 
+              #record_token(state,ch)
+              
+          elif state in Error: # Verificar si el estado está en el arreglo error
+               error_message(state)               
+          
+          else:
+              print(f"El caracter no está en ninguno de los arreglos.")   
+          
+              
        
-       
+
+scanner()       
 
 """ 
 def transition_table(state, ch):
@@ -427,53 +464,4 @@ def transition_table(state, ch):
        elif state==14  and ( ch== '\r' or ch == '{' or ch =='\n'):  #estado error
             state=40
 """
-"""
 
-
-              
-
-def scanner():
-    try:
-         # Abrir el archivo en modo lectura
-         with open('archivo.txt', 'r') as file:
-                  
-          while True:
-               # Leer el contenido del archivo
-               content = file.read(1)
-             
-               if not content:
-                    break  # Fin del archivo
-               #print(ch)
-    except FileNotFoundError:
-        print("El archivo no se encontró.")
-    except Exception as e:
-        print("Ocurrió un error:", str(e))
-    
-
-
-
-
-scanner()
-
-
-          state =0 #iniciamos el DFA
-
-               # Bucle para recorrer la tabla de transición hasta que no esté en ninguno de los arreglos de aceptor y de error
-               while state not in Accept and state not in Error:
-                    
-                
-                # Verificar si el número está en los arreglos
-               if state in Accept:
-                    print(f"está en el arreglo Accept.")
-               elif state in Error:
-                    error_message(state)
-               else:
-                    print(f"El caracter no está en ninguno de los arreglos.")
-
-
-
-
-
-        
-
-"""

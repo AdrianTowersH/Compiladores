@@ -15,7 +15,8 @@ Operators={
 }
 
 Identifier = {}
-Identifier = {}
+Integers = {}
+Reals = {}
 
 Keywords = {
     43: 'program',
@@ -51,10 +52,6 @@ def check_keyword(word):
 def check_identifier(word):
     return word in Identifier.values()
 
-def record_token (state,ch,word):
-    if not check_keyword(word) and not check_identifier(word):
-        new_id = len(Identifier) + 1
-        Identifier[new_id] = word
 
 
 def error_message(state):
@@ -288,18 +285,28 @@ print(output)
 """
 
 def show_tables():
-    for clave, valor in Keywords.items():
-        print(clave, ":", valor)
+    print("Tabla de identificadores\n")
 
-    for clave, valor in Identifier.items():
-          print(clave, ":", valor)
+    for clave_id, valor_id in Identifier.items():
+          print(clave_id, ":", valor_id)
+    
+    print("Tabla de numeros enteros\n")
+    for clave_int, valor_int in Integers.items():
+        print(clave_int, ":", valor_int)
+
+    print("Tabla de numeros reales\n")
+    for clave_float, valor_float in Reals.items():
+        print(clave_float, ":", valor_float)
       
 
-def main():
-      scanner()
-      show_tables()
 
-  
+
+
+def record_token (state,ch,word):
+    if not check_keyword(word) and not check_identifier(word):
+        new_id = len(Identifier) + 1
+        Identifier[new_id] = word
+
 
 
 def scanner():
@@ -336,7 +343,9 @@ def scanner():
               print(f"El caracter no está en ninguno de los arreglos.")   
           
               
-       
+def main():
+      scanner()
+      show_tables()     
 
 main()       
 

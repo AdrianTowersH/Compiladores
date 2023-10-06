@@ -4,8 +4,12 @@ import re
 # Definir un arreglo con los estados de no aceptores
 Advance = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
 
+# Definir un arreglo con los estados que reconoce comentarios
+Comment = [19,38]
+
 # Definir un arreglo con los estados de aceptor
-Accept = [15, 16, 17, 18, 19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38]
+Accept = [15, 16, 17, 18, 19, 20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38]
+
 
 # Definir un arreglo con los estados de error
 Error = [39,40,41,42] 
@@ -69,6 +73,8 @@ def error_message(state):
                sys.exit()
 
                
+
+
 
 def transition_table(state, ch):
         if(state < 7):
@@ -303,9 +309,10 @@ def show_tables():
 
 
 def record_token (state,ch,word):
-    if not check_keyword(word) and not check_identifier(word):
-        new_id = len(Identifier) + 1
-        Identifier[new_id] = word
+        print(state)
+        if not check_keyword(word) and not check_identifier(word):
+            new_id = len(Identifier) + 1
+            Identifier[new_id] = word
 
 
 
@@ -329,11 +336,21 @@ def scanner():
                         #print(f"está en el arreglo Advance.") 
                         word=word+ch
                         word=re.sub(r'\s', '', word)
-                        #print(word)  
-                        ch= file.read(1)   
-                       
-          if state in Accept:  # Verificar si el estado está en el arreglo aceptor 
-              #print("Estado ",state,"letra ",ch, "cadena de palabra \n", word) 
+                        #print(word)
+                        ch= file.read(1)
+                        
+                 #print(state)
+                 if( state== 21):
+                    word='<='
+                 elif(state== 22):
+                        word='<>'
+                 elif(state== 24):
+                        word='>='
+                 elif(state== 25):
+                        word=':='
+
+          if state in Accept and state not in Comment:  # Verificar si el estado está en el arreglo aceptor 
+              print("Estado ",state,"letra ",ch, "cadena de palabra \n", word)
               record_token(state,ch,word)
               
           elif state in Error: # Verificar si el estado está en el arreglo error

@@ -1,4 +1,5 @@
 import sys
+import re
 
 # Definir un arreglo con los estados de no aceptores
 Advance = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
@@ -8,6 +9,13 @@ Accept = [15, 16, 17, 18, 19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,
 
 # Definir un arreglo con los estados de error
 Error = [39,40,41,42] 
+
+Operators={
+       43: 'program',
+}
+
+Identifier = {}
+Identifier = {}
 
 Keywords = {
     43: 'program',
@@ -33,18 +41,31 @@ Keywords = {
     63: 'writeLn'
 }
 
-def record_token (state,ch):
-       print("esta en llamas")
+def check_keyword(word):
+    for key, value in Keywords.items():
+        if value == word:
+            return True
+    return False
+
+
+def check_identifier(word):
+    return word in Identifier.values()
+
+def record_token (state,ch,word):
+    if not check_keyword(word) and not check_identifier(word):
+        new_id = len(Identifier) + 1
+        Identifier[new_id] = word
+
 
 def error_message(state):
        if state== 39:
-              print(f"Simbolo de asignación := mal asignado.")
+              print(f"Simbolo de asignación := mal asignado.\n")
               sys.exit()
        elif state==40 :
-              print(f"Comentario de una linea mal asignado.")
+              print(f"Comentario de una linea mal asignado.\n")
               sys.exit()
        elif state ==41:
-               print(f" Simbolo de comentario de una linea mal asignado.")
+               print(f" Simbolo de comentario de una linea mal asignado.\n")
                sys.exit()
        elif state ==42:
                print(f"Caracter inexistente.")
@@ -266,6 +287,21 @@ print(output)
 
 """
 
+def show_tables():
+    for clave, valor in Keywords.items():
+        print(clave, ":", valor)
+
+    for clave, valor in Identifier.items():
+          print(clave, ":", valor)
+      
+
+def main():
+      scanner()
+      show_tables()
+
+  
+
+
 def scanner():
     with open('archivo.txt') as file:
         while True:
@@ -282,15 +318,16 @@ def scanner():
           while state not in Accept and state not in Error:
                  #print(state, ch)
                  state=transition_table(state, ch)
-
                  if state in Advance:
                         #print(f"está en el arreglo Advance.") 
                         word=word+ch
-                        ch= file.read(1)
-                        #print(word)
+                        word=re.sub(r'\s', '', word)
+                        #print(word)  
+                        ch= file.read(1)   
+                       
           if state in Accept:  # Verificar si el estado está en el arreglo aceptor 
-              print("Estado ",state,"letra ",ch, "cadena de palabra ", word) 
-              #record_token(state,ch)
+              #print("Estado ",state,"letra ",ch, "cadena de palabra \n", word) 
+              record_token(state,ch,word)
               
           elif state in Error: # Verificar si el estado está en el arreglo error
                error_message(state)               
@@ -301,6 +338,6 @@ def scanner():
               
        
 
-scanner()       
+main()       
 
 

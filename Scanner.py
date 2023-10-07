@@ -330,6 +330,14 @@ def show_tables():
 
 
 
+def find_id(diccionario, valor_buscado):
+    for clave, valor in diccionario.items():
+        if valor == valor_buscado:
+            return clave
+    # Si el valor no se encuentra en el diccionario, puedes manejarlo como desees, por ejemplo, retornando None.
+    return None
+
+
 
 def record_token (state,ch,word):
         print(state)
@@ -339,17 +347,31 @@ def record_token (state,ch,word):
              num = int(word)
              if num not in Integers.values():
                 # Encontrar el próximo ID disponible
-                id = max(Integers.keys(), default=0) + 1
-                Integers[id] = num
+                idi =max(Integers.keys(), default=0) + 1
+                Integers[idi] = num
+                print("\n<",state,",",idi,">")
+             elif num  in Integers.values():
+                   idi=find_id(Integers,num)
+                   print("\n<",state,",",idi,">")
         
         elif is_float(word):
               num = float(word)
               if num not in Reals.values():
-                    Reals[len(Reals) + 1] = num
+                    idf=len(Reals) + 1
+                    Reals[idf] = num
+                    print("\n<",state,",",idf,">")
+              elif num  in Reals.values():
+                    idf=find_id(Reals,num)
+                    print("\n<",state,",",idf,">")
 
-        elif not check_keyword(word) and not check_identifier(word):
-            new_id = len(Identifier) + 1
-            Identifier[new_id] = word
+        elif not check_keyword(word) :
+            if not check_identifier(word):
+                new_id = len(Identifier) + 1
+                Identifier[new_id] = word
+                print("\n<",state,",",new_id,">")
+            elif check_identifier(word):
+                  new_id=find_id(Identifier,word)
+                  print("\n<",state,",",new_id,">")
 
 
 
@@ -373,7 +395,7 @@ def scanner():
                         #print(f"está en el arreglo Advance.") 
                         word=word+ch
                         word=re.sub(r'\s', '', word)
-                        print(word)
+                        #print(word)
                         ch= file.read(1)
                         
                  print(state)
@@ -387,7 +409,7 @@ def scanner():
                         word=':='
 
           if state in Accept and state not in Comment:  # Verificar si el estado está en el arreglo aceptor 
-              print("Estado ",state,"letra ",ch, "cadena de palabra \n", word)
+              #print("Estado ",state,"letra ",ch, "cadena de palabra \n", word)
               record_token(state,ch,word)
               
           elif state in Error: # Verificar si el estado está en el arreglo error

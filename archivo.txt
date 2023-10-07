@@ -3,3 +3,4 @@ program Ejemplo2;
 var
 a: integer;
 b: real;
+22 22 220 2.23 2.3 2.23

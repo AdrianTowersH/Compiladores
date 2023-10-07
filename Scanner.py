@@ -70,6 +70,12 @@ def check_keyword(word):
             return True
     return False
 
+def check_operators(ch):
+    for key, value in Operators.items():
+        if value == ch:
+            return key
+    return key
+
 
 # Función para verificar si el string es un número entero
 def is_integer(word):
@@ -356,11 +362,7 @@ def find_id(diccionario, valor_buscado):
     return None
 
 
-
-def record_token (state,ch,word):
-        print(state)
-        
-        
+def record_tables(state,ch,word):
         if is_integer(word):
              num = int(word)
              if num not in Integers.values():
@@ -390,6 +392,17 @@ def record_token (state,ch,word):
             elif check_identifier(word):
                   new_id=find_id(Identifier,word)
                   print("\n<",state,",",new_id,">")
+        check_operators(ch)
+        ("\n<",check_operators(ch),">")
+        
+
+def record_token (state,ch,word):
+        #print(state)
+        if(state==15 or 16 or state==17):
+             record_tables(state,ch,word)
+             
+        else:
+              print("\n<",state,">")
 
 
 
@@ -416,7 +429,7 @@ def scanner():
                         #print(word)
                         ch= file.read(1)
                         
-                 print(state)
+                 #print(state)
                  if( state== 21):
                     word='<='
                  elif(state== 22):
@@ -425,7 +438,7 @@ def scanner():
                         word='>='
                  elif(state== 25):
                         word=':='
-
+                 print(ch)
           if state in Accept and state not in Comment:  # Verificar si el estado está en el arreglo aceptor 
               #print("Estado ",state,"letra ",ch, "cadena de palabra \n", word)
               record_token(state,ch,word)

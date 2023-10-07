@@ -53,6 +53,26 @@ def check_keyword(word):
     return False
 
 
+# Función para verificar si el string es un número entero
+def is_integer(word):
+    try:
+        int(word)
+        return True
+    except ValueError:
+        return False
+
+
+# Función para verificar si el string es un número flotante
+def is_float(word):
+    try:
+        float(word)
+        return True
+    except ValueError:
+        return False
+
+
+
+
 def check_identifier(word):
     return word in Identifier.values()
 
@@ -176,7 +196,10 @@ def transition_table(state, ch):
                 else:
                         return -4
             elif (state==4 ): 
-                if ch== '.':  #inicio estado 4  estados no aceptores
+                if ch.isdigit():  #inicio estado 4  estados no aceptores
+                        state=4
+                        return state
+                if ch== '.':  
                         state=5
                         return state
                 elif (ch.isalpha() or  ch.isspace() or ch in '<>(=:+-*/;,)[]{' or  ch== "'"): # estado aceptor
@@ -310,7 +333,21 @@ def show_tables():
 
 def record_token (state,ch,word):
         print(state)
-        if not check_keyword(word) and not check_identifier(word):
+        
+        
+        if is_integer(word):
+             num = int(word)
+             if num not in Integers.values():
+                # Encontrar el próximo ID disponible
+                id = max(Integers.keys(), default=0) + 1
+                Integers[id] = num
+        
+        elif is_float(word):
+              num = float(word)
+              if num not in Reals.values():
+                    Reals[len(Reals) + 1] = num
+
+        elif not check_keyword(word) and not check_identifier(word):
             new_id = len(Identifier) + 1
             Identifier[new_id] = word
 
@@ -336,10 +373,10 @@ def scanner():
                         #print(f"está en el arreglo Advance.") 
                         word=word+ch
                         word=re.sub(r'\s', '', word)
-                        #print(word)
+                        print(word)
                         ch= file.read(1)
                         
-                 #print(state)
+                 print(state)
                  if( state== 21):
                     word='<='
                  elif(state== 22):

@@ -352,9 +352,28 @@ def show_tables():
     print("\nTabla de numeros reales")
     for clave_float, valor_float in Reals.items():
         print(clave_float, ":", valor_float)
-      
 
 
+
+
+def complete_string(state,word):
+        if( state== 21):
+                word='<='
+                return word
+        elif(state== 22):
+                word='<>'
+                return word
+        elif(state== 24):
+                word='>='
+                return word
+        elif(state== 25):
+                word=':='
+                return word
+        elif(state== 33):
+              word=word+"'" 
+              return word     
+        
+        return word
 
 def find_id(diccionario, valor_buscado):
     for clave, valor in diccionario.items():
@@ -399,6 +418,12 @@ def record_table (state,ch,word):
             elif check_identifier(word):
                   new_id=find_id(Identifier,word)
                   print("\n<",state,",",new_id,">")
+       
+        if ch is not None and ch not in [' ', '\n', '\r']:
+                state = find_id(Operators, ch)
+                print("\n<", state, ">")
+
+
 
 def record_token (state,ch,word):
       if(state==15 or state==16 or state==17):
@@ -432,19 +457,11 @@ def scanner():
                         ch = file.read(1)
 
                  #print(state, ch)
-                 if( state== 21):
-                    word='<='
-                 elif(state== 22):
-                        word='<>'
-                 elif(state== 24):
-                        word='>='
-                 elif(state== 25):
-                        word=':='
-                 elif(state== 33):
-                        word=word+"'"
+                 word=complete_string(state,word)
+
           #print("Estado ",state,"letra ",ch)
           if state in Accept and state not in Comment:  # Verificar si el estado está en el arreglo aceptor 
-              print("Estado ",state,"letra ",ch, "cadena de palabra \n", word)
+              #print("Estado ",state,"letra ",ch, "cadena de palabra \n", word)
               record_token(state,ch,word)
               
           elif state in Error: # Verificar si el estado está en el arreglo error

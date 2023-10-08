@@ -356,11 +356,7 @@ def find_id(diccionario, valor_buscado):
     return None
 
 
-
-def record_token (state,ch,word):
-        print(state)
-        
-        
+def record_table (state,ch,word):
         if is_integer(word):
              num = int(word)
              if num not in Integers.values():
@@ -387,9 +383,29 @@ def record_token (state,ch,word):
                 new_id = len(Identifier) + 1
                 Identifier[new_id] = word
                 print("\n<",state,",",new_id,">")
-            elif check_identifier(word):
+
+        else :
                   new_id=find_id(Identifier,word)
                   print("\n<",state,",",new_id,">")
+
+
+                  
+
+
+
+
+      
+
+def record_token (state,ch,word):
+        #print(state)
+        if(state==15 or state==16 or state== 17):
+              record_table (state,ch,word)
+        else:
+              print("\n<",state,">")
+              
+        
+        
+
 
 
 
@@ -416,16 +432,8 @@ def scanner():
                         #print(word)
                         ch= file.read(1)
                         
-                 #print(state)
-                 if( state== 21):
-                    word='<='
-                 elif(state== 22):
-                        word='<>'
-                 elif(state== 24):
-                        word='>='
-                 elif(state== 25):
-                        word=':='
-          print("Estado ",state,"letra ",ch)
+
+          #print("Estado ",state,"letra ",ch)
           if state in Accept and state not in Comment:  # Verificar si el estado está en el arreglo aceptor 
               print("Estado ",state,"letra ",ch, "cadena de palabra \n", word)
               record_token(state,ch,word)

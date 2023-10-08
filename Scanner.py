@@ -29,7 +29,7 @@ Operators = {
     30: '=',
     31: ';',
     32: ',',
-    33: "'",
+    33: "'", 
     34: '.',
     35: ')',
     36: '[',
@@ -429,9 +429,9 @@ def scanner():
                         word=word+ch
                         word=re.sub(r'\s', '', word)
                         #print(word)
-                        ch= file.read(1)
+                        ch = file.read(1)
 
-                 #print(state)
+                 #print(state, ch)
                  if( state== 21):
                     word='<='
                  elif(state== 22):
@@ -440,9 +440,11 @@ def scanner():
                         word='>='
                  elif(state== 25):
                         word=':='
+                 elif(state== 33):
+                        word=word+"'"
           #print("Estado ",state,"letra ",ch)
           if state in Accept and state not in Comment:  # Verificar si el estado está en el arreglo aceptor 
-              #print("Estado ",state,"letra ",ch, "cadena de palabra \n", word)
+              print("Estado ",state,"letra ",ch, "cadena de palabra \n", word)
               record_token(state,ch,word)
               
           elif state in Error: # Verificar si el estado está en el arreglo error

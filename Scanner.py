@@ -98,16 +98,16 @@ def check_identifier(word):
 
 def error_message(state):
        if state== 39:
-              print(f"Simbolo de asignación := mal asignado.\n")
+              print(f"\nSimbolo de asignación := mal asignado.")
               sys.exit()
        elif state==40 :
-              print(f"Comentario de una linea mal asignado.\n")
+              print(f"\nComentario de una linea mal asignado.\n")
               sys.exit()
        elif state ==41:
-               print(f" Simbolo de comentario de una linea mal asignado.\n")
+               print(f"\nSimbolo de comentario de una linea mal asignado.")
                sys.exit()
        elif state ==42:
-               print(f"Caracter inexistente.")
+               print(f"\nCaracter inexistente.")
                sys.exit()
 
                
@@ -358,7 +358,7 @@ def find_id(diccionario, valor_buscado):
 
 
 def record_token (state,ch,word):
-        print(state)
+        #print(state)
         
         
         if is_integer(word):
@@ -392,7 +392,6 @@ def record_token (state,ch,word):
                   print("\n<",state,",",new_id,">")
 
 
-
 def scanner():
     with open('archivo.txt') as file:
         while True:
@@ -415,7 +414,7 @@ def scanner():
                         word=re.sub(r'\s', '', word)
                         #print(word)
                         ch= file.read(1)
-                        
+
                  #print(state)
                  if( state== 21):
                     word='<='
@@ -425,7 +424,7 @@ def scanner():
                         word='>='
                  elif(state== 25):
                         word=':='
-          print("Estado ",state,"letra ",ch)
+          #print("Estado ",state,"letra ",ch)
           if state in Accept and state not in Comment:  # Verificar si el estado está en el arreglo aceptor 
               print("Estado ",state,"letra ",ch, "cadena de palabra \n", word)
               record_token(state,ch,word)

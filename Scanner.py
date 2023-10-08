@@ -71,6 +71,11 @@ def check_keyword(word):
     return False
 
 
+def check_operators(word):
+    for key, value in Operators.items():
+        if value == word:
+            return True
+    return False
 
 
 
@@ -362,7 +367,7 @@ def find_id(diccionario, valor_buscado):
 
 def record_token (state,ch,word):
         #print(state)
-        if  check_keyword(word) :
+        if  check_keyword(word):
               idk=find_id(Keywords,word)
               print("\n<",idk,">")
         
@@ -431,7 +436,7 @@ def scanner():
                         word=':='
           #print("Estado ",state,"letra ",ch)
           if state in Accept and state not in Comment:  # Verificar si el estado está en el arreglo aceptor 
-              print("Estado ",state,"letra ",ch, "cadena de palabra \n", word)
+              #print("Estado ",state,"letra ",ch, "cadena de palabra \n", word)
               record_token(state,ch,word)
               
           elif state in Error: # Verificar si el estado está en el arreglo error

@@ -71,6 +71,9 @@ def check_keyword(word):
     return False
 
 
+
+
+
 # Función para verificar si el string es un número entero
 def is_integer(word):
     try:
@@ -332,16 +335,16 @@ print(output)
 """
 
 def show_tables():
-    print("Tabla de identificadores\n")
+    print("\nTabla de identificadores")
 
     for clave_id, valor_id in Identifier.items():
           print(clave_id, ":", valor_id)
     
-    print("Tabla de numeros enteros\n")
+    print("\nTabla de numeros enteros")
     for clave_int, valor_int in Integers.items():
         print(clave_int, ":", valor_int)
 
-    print("Tabla de numeros reales\n")
+    print("\nTabla de numeros reales")
     for clave_float, valor_float in Reals.items():
         print(clave_float, ":", valor_float)
       
@@ -359,9 +362,11 @@ def find_id(diccionario, valor_buscado):
 
 def record_token (state,ch,word):
         #print(state)
+        if  check_keyword(word) :
+              idk=find_id(Keywords,word)
+              print("\n<",idk,">")
         
-        
-        if is_integer(word):
+        elif is_integer(word):
              num = int(word)
              if num not in Integers.values():
                 # Encontrar el próximo ID disponible

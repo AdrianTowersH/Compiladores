@@ -364,8 +364,7 @@ def find_id(diccionario, valor_buscado):
     return None
 
 
-
-def record_token (state,ch,word):
+def record_table (state,ch,word):
         #print(state)
         if  check_keyword(word):
               idk=find_id(Keywords,word)
@@ -392,7 +391,7 @@ def record_token (state,ch,word):
                     idf=find_id(Reals,num)
                     print("\n<",state,",",idf,">")
 
-        elif not check_keyword(word) :
+        elif not check_keyword(word) and  not check_operators(word):
             if not check_identifier(word):
                 new_id = len(Identifier) + 1
                 Identifier[new_id] = word
@@ -400,6 +399,13 @@ def record_token (state,ch,word):
             elif check_identifier(word):
                   new_id=find_id(Identifier,word)
                   print("\n<",state,",",new_id,">")
+
+def record_token (state,ch,word):
+      if(state==15 or state==16 or state==17):
+            record_table (state,ch,word)
+      else:
+            print("\n<",state,">")
+
 
 
 def scanner():

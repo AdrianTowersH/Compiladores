@@ -14,7 +14,13 @@ Accept = [15, 16, 17, 18, 19, 20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36
 # Definir un arreglo con los estados de error
 Error = [39,40,41,42] 
 
-Operators = {
+
+
+Identifier = {}
+Integers = {}
+Reals = {}
+
+Keywords = {
     18: '(',
     20: '<',
     21: '<=',
@@ -33,14 +39,7 @@ Operators = {
     34: '.',
     35: ')',
     36: '[',
-    38: ']'
-}
-
-Identifier = {}
-Integers = {}
-Reals = {}
-
-Keywords = {
+    38: ']',
     43: 'program',
     44: 'procedure',
     45: 'function',

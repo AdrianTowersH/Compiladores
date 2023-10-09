@@ -421,7 +421,8 @@ def record_table (state,ch,word):
        
         if ch is not None and ch not in [' ', '\n', '\r']:
                 state = find_id(Operators, ch)
-                print("\n<", state, ">")
+                if state is not None and ch not in [' ', '\n', '\r']:
+                   print("\n<", state, ">")
 
 
 
@@ -429,7 +430,8 @@ def record_token (state,ch,word):
       if(state==15 or state==16 or state==17):
             record_table (state,ch,word)
       else:
-            print("\n<",state,">")
+           if state is not None and ch not in [' ', '\n', '\r']:
+              print("\n<",state,">")
 
 
 
@@ -461,7 +463,7 @@ def scanner():
 
           #print("Estado ",state,"letra ",ch)
           if state in Accept and state not in Comment:  # Verificar si el estado está en el arreglo aceptor 
-              #print("Estado ",state,"letra ",ch, "cadena de palabra \n", word)
+              print("Estado ",state,"letra ",ch, "cadena de palabra \n", word)
               record_token(state,ch,word)
               
           elif state in Error: # Verificar si el estado está en el arreglo error

@@ -127,7 +127,7 @@ def transition_table(state, ch):
             if(state== 0):
                 if ch.isspace():
                        state=0
-                       return 0
+                       return state
                 elif  ch.isalpha(): #inicio estado cero
                         state=1                 #inicio  de estados no aceptores
                         return state
@@ -340,16 +340,16 @@ print(output)
 """
 
 def show_tables():
-    print("\nTabla de identificadores")
+    print("\nTabla de identificadores\n")
 
     for clave_id, valor_id in Identifier.items():
           print(clave_id, ":", valor_id)
     
-    print("\nTabla de numeros enteros")
+    print("\nTabla de numeros enteros\n")
     for clave_int, valor_int in Integers.items():
         print(clave_int, ":", valor_int)
 
-    print("\nTabla de numeros reales")
+    print("\nTabla de numeros reales\n")
     for clave_float, valor_float in Reals.items():
         print(clave_float, ":", valor_float)
 
@@ -463,7 +463,7 @@ def scanner():
 
           #print("Estado ",state,"letra ",ch)
           if state in Accept and state not in Comment:  # Verificar si el estado está en el arreglo aceptor 
-              print("Estado ",state,"letra ",ch, "cadena de palabra \n", word)
+              #print("Estado ",state,"letra ",ch, "cadena de palabra \n", word)
               record_token(state,ch,word)
               
           elif state in Error: # Verificar si el estado está en el arreglo error

@@ -396,7 +396,7 @@ def record_table (state,ch,word):
               idk=find_id(Keywords,word)
               print("\n<",idk,">")
         
-        elif is_integer(word): #Valida si la cadena es un numero entero de ser asi lo guardamos en la tabla
+        elif is_integer(word): #Valida si la cadena es un numero entero de ser asi lo guardamos en la tabla de enteros
              num = int(word)
              if num not in Integers.values():
                 # Encontrar el próximo ID disponible
@@ -407,22 +407,22 @@ def record_table (state,ch,word):
                    idi=find_id(Integers,num)
                    print("\n<",state,",",idi,">")
         
-        elif is_float(word):
+        elif is_float(word): #Valida si la cadena es un numero reales de ser asi lo guardamos en la tabla de reales
               num = float(word)
               if num not in Reals.values():
-                    idf=len(Reals) + 1
+                    idf=len(Reals) + 1 #Incrementamos los IDs
                     Reals[idf] = num
-                    print("\n<",state,",",idf,">")
-              elif num  in Reals.values():
+                    print("\n<",state,",",idf,">") #Mostramos estado y ID
+              elif num  in Reals.values(): #Si el numero ya existe no incrementamos la cadena
                     idf=find_id(Reals,num)
                     print("\n<",state,",",idf,">")
 
-        elif not check_keyword(word) and  not check_operators(word):
+        elif not check_keyword(word) and  not check_operators(word): #Valida si la cadena no es una palabra reservada o un simbolo
             if not check_identifier(word):
-                new_id = len(Identifier) + 1
+                new_id = len(Identifier) + 1 #Incrementamos los IDs en el diccionario de identificadores
                 Identifier[new_id] = word
-                print("\n<",state,",",new_id,">")
-            elif check_identifier(word):
+                print("\n<",state,",",new_id,">") #Mostramos estado y ID
+            elif check_identifier(word):        #Si la palabra ya existe no incrementamos la cadena
                   new_id=find_id(Identifier,word)
                   print("\n<",state,",",new_id,">")
        

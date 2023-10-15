@@ -14,6 +14,14 @@ Accept = [15, 16, 17, 18, 19, 20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36
 # Definir un arreglo con los estados de error
 Error = [39,40,41,42] 
 
+#Definir diccionario para identificadores
+Identifier = {}
+#Definir diccionario para numeros enteros
+Integers = {}
+#Definir diccionario para numeros reales
+Reals = {}
+
+# Definir un diccionario con todos los operadores
 Operators = {
     18: '(',
     20: '<',
@@ -36,10 +44,9 @@ Operators = {
     38: ']'
 }
 
-Identifier = {}
-Integers = {}
-Reals = {}
 
+
+# Definir un diccionario con todas las palabras claves
 Keywords = {
     43: 'program',
     44: 'procedure',
@@ -64,13 +71,14 @@ Keywords = {
     63: 'writeLn'
 }
 
+#Funcion booleana que checa si la palabra esta en el diccionario de palabras reservadas
 def check_keyword(word):
     for key, value in Keywords.items():
         if value == word:
             return True
     return False
 
-
+#Funcion booleana que checa si la palabra esta en el diccionario de  operadores
 def check_operators(word):
     for key, value in Operators.items():
         if value == word:
@@ -79,7 +87,7 @@ def check_operators(word):
 
 
 
-# Función para verificar si el string es un número entero
+#Función para verificar si el string es un número entero
 def is_integer(word):
     try:
         int(word)
@@ -98,12 +106,12 @@ def is_float(word):
 
 
 
-
+#Funcion que checa que retorna el identificador del diccionario de identificadores
 def check_identifier(word):
     return word in Identifier.values()
 
 
-
+#Funcion que muestra mensaje de error dependiendo el estado y detiene el programa
 def error_message(state):
        if state== 39:
               print(f"\nSimbolo de asignación := mal asignado.")
@@ -119,9 +127,8 @@ def error_message(state):
                sys.exit()
 
                
-
-
-
+#Funcion de tabla de transicion que retorna el estado dependiendo del estado actual y la letra actual
+#Aqui ocurre la transicion
 def transition_table(state, ch):
         if(state < 7):
             if(state== 0):
@@ -338,7 +345,7 @@ output = transition_table(state, ch)
 print(output)
 
 """
-
+#Funcion que muestra las tablas final de identificadores, numeros enteros y reales
 def show_tables():
     print("\nTabla de identificadores\n")
 
@@ -355,7 +362,7 @@ def show_tables():
 
 
 
-
+#Función que añade la ultima letra a la palabra iterada
 def complete_string(state,word):
         if( state== 21):
                 word='<='
@@ -375,28 +382,28 @@ def complete_string(state,word):
         
         return word
 
+#Funcion que retora el id de la palabra dependiendo su diccionario
 def find_id(diccionario, valor_buscado):
     for clave, valor in diccionario.items():
         if valor == valor_buscado:
             return clave
-    # Si el valor no se encuentra en el diccionario, puedes manejarlo como desees, por ejemplo, retornando None.
     return None
 
-
+#Funcion que sirve para definir si la cadena de los estados
 def record_table (state,ch,word):
         #print(state)
-        if  check_keyword(word):
+        if  check_keyword(word): #Valida si esta en el diccionario de palabras claves 
               idk=find_id(Keywords,word)
               print("\n<",idk,">")
         
-        elif is_integer(word):
+        elif is_integer(word): #Valida si la cadena es un numero entero de ser asi lo guardamos en la tabla
              num = int(word)
              if num not in Integers.values():
                 # Encontrar el próximo ID disponible
-                idi =max(Integers.keys(), default=0) + 1
+                idi =max(Integers.keys(), default=0) + 1 #Incrementamos los IDs
                 Integers[idi] = num
-                print("\n<",state,",",idi,">")
-             elif num  in Integers.values():
+                print("\n<",state,",",idi,">")   #Mostramos estado y ID
+             elif num  in Integers.values(): #Si el numero ya existe no incrementamos la cadena
                    idi=find_id(Integers,num)
                    print("\n<",state,",",idi,">")
         
@@ -419,16 +426,16 @@ def record_table (state,ch,word):
                   new_id=find_id(Identifier,word)
                   print("\n<",state,",",new_id,">")
        
-        if ch is not None and ch not in [' ', '\n', '\r']:
+        if ch is not None and ch not in [' ', '\n', '\r']:  # Si la letra quee sigue despues de la cadena es un operador lo recuperamos
                 state = find_id(Operators, ch)
                 if state is not None and ch not in [' ', '\n', '\r']:
                    print("\n<", state, ">")
 
 
-
+#Funcion que se encarga de mostrar el estado segun su transicion
 def record_token (state,ch,word):
-      if(state==15 or state==16 or state==17):
-            record_table (state,ch,word)
+      if(state==15 or state==16 or state==17): #En dado caso que sea un estado de los aceptores de identificador, numero real o entero
+            record_table (state,ch,word) #Hay que recuperar el ultimo caracter
       else:
            if state is not None and ch not in [' ', '\n', '\r']:
               print("\n<",state,">")
@@ -441,17 +448,17 @@ def scanner():
           # leer un archivo
           ch = file.read(1)
 
-          if not ch:
+          if not ch: #Valida si el archivo esta vacio
                  break
           
-          state =0 #iniciamos el DFA
-          word=""
+          state =0 #Iniciamos el DFA
+          word="" #Iniciamos la cadena de identificadores con vacio
 
           # Bucle para recorrer la tabla de transición hasta que no esté en ninguno de los arreglos de aceptor y de error
           while state not in Accept and state not in Error:
                  #print(state, ch)
                  state=transition_table(state, ch)
-                 if state in Advance:
+                 if state in Advance: #Valida si es un estado de avance para seguir leyendo
                         #print(f"está en el arreglo Advance.") 
                         word=word+ch
                         word=re.sub(r'\s', '', word)
@@ -471,7 +478,7 @@ def scanner():
           
            
           
-              
+#Funcion main que se encarga de iniciar el scanner y depues mostrar las tablas         
 def main():
       scanner()
       show_tables()     

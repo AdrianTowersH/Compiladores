@@ -41,7 +41,7 @@ Operators = {
     34: '.',
     35: ')',
     36: '[',
-    38: ']'
+    37: ']'
 }
 
 
@@ -419,7 +419,7 @@ def record_table (state,ch,word):
 
         elif not check_keyword(word) and  not check_operators(word): #Valida si la cadena no es una palabra reservada o un simbolo
             if not check_identifier(word):
-                new_id = len(Identifier) + 1 #Incrementamos los IDs en el diccionario de identificadores
+                new_id = len(Identifier) + 1 #Incrementamos los IDs en el diccionario de identificadoresZ
                 Identifier[new_id] = word
                 print("\n<",state,",",new_id,">") #Mostramos estado y ID
             elif check_identifier(word):        #Si la palabra ya existe no incrementamos la cadena

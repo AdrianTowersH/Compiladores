@@ -467,6 +467,11 @@ def scanner():
                         word=re.sub(r'\s', '', word)
                         #print(word)
                         ch = file.read(1)
+                        if not ch: #Valida si el archivo esta vacio
+                              if(state== 8 or state==9):
+                                    error_message(state)
+                              
+                              break
 
                  #print(state, ch)
                  word=complete_string(state,word)

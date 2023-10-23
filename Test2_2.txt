@@ -1,9 +1,9 @@
-{ Example #2  } 
+{ Example #2 }
 
 program Ejemplo2;
 
 var
-a := integer;
+a : integer;
 b := real;
 
 (* This is a procedure block*)
@@ -19,4 +19,4 @@ begin
   writeLn( ' a = ', a );
   writeLn( ' b = ', b );
 end. (* This is the end of the main
-program block )
+program block *)

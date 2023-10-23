@@ -12,7 +12,7 @@ Accept = [15, 16, 17, 18, 19, 20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36
 
 
 # Definir un arreglo con los estados de error
-Error = [39,40,41,42] 
+Error = [39,40,41,42,43] 
 
 #Definir diccionario para identificadores
 Identifier = {}
@@ -48,27 +48,27 @@ Operators = {
 
 # Definir un diccionario con todas las palabras claves
 Keywords = {
-    43: 'program',
-    44: 'procedure',
-    45: 'function',
-    46: 'begin',
-    47: 'end',
-    48: 'var',
-    49: 'integer',
-    50: 'real',
-    51: 'string',
-    52: 'array',
-    53: 'of',
-    54: 'if',
-    55: 'then',
-    56: 'else',
-    57: 'repeat',
-    58: 'until',
-    59: 'for',
-    60: 'to',
-    61: 'do',
-    62: 'readLn',
-    63: 'writeLn'
+    44: 'program',
+    45: 'procedure',
+    46: 'function',
+    47: 'begin',
+    48: 'end',
+    49: 'var',
+    50: 'integer',
+    51: 'real',
+    52: 'string',
+    53: 'array',
+    54: 'of',
+    55: 'if',
+    56: 'then',
+    57: 'else',
+    58: 'repeat',
+    59: 'until',
+    60: 'for',
+    61: 'to',
+    62: 'do',
+    63: 'readLn',
+    64: 'writeLn'
 }
 
 #Funcion booleana que checa si la palabra esta en el diccionario de palabras reservadas
@@ -124,6 +124,9 @@ def error_message(state):
                sys.exit()
        elif state ==42:
                print(f"\nCaracter inexistente.")
+               sys.exit()
+       else :
+               print(f"\nComentario de N lineas no terminado")
                sys.exit()
 
                
@@ -389,7 +392,7 @@ def find_id(diccionario, valor_buscado):
             return clave
     return None
 
-#Funcion que sirve para definir si la cadena de los estados
+#Funcion que sirve para definir  la cadena de los estados
 def record_table (state,ch,word):
         #print(state)
         if  check_keyword(word): #Valida si esta en el diccionario de palabras claves 

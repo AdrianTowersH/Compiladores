@@ -8,11 +8,11 @@ Advance = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
 Comment = [19,38]
 
 # Definir un arreglo con los estados de aceptor
-Accept = [15, 16, 17, 18, 19, 20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38]
+Accept = [15, 16, 17, 18, 19, 20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39]
 
 
 # Definir un arreglo con los estados de error
-Error = [39,40,41,42,43] 
+Error = [40,41,42,43] 
 
 #Definir diccionario para identificadores
 Identifier = {}
@@ -41,7 +41,8 @@ Operators = {
     34: '.',
     35: ')',
     36: '[',
-    37: ']'
+    37: ']',
+    39: ':'
 }
 
 
@@ -113,10 +114,10 @@ def check_identifier(word):
 
 #Funcion que muestra mensaje de error dependiendo el estado y detiene el programa
 def error_message(state):
-       if state== 39:
+       """if state== 39:
               print(f"\nSimbolo de asignación := mal asignado.")
-              sys.exit()
-       elif state==40 :
+              sys.exit()"""
+       if state==40 :
               print(f"\nComentario de una linea mal asignado.\n")
               sys.exit()
        elif state ==41:
@@ -395,7 +396,7 @@ def find_id(diccionario, valor_buscado):
 #Funcion que sirve para definir  la cadena de los estados
 def record_table (state,ch,word):
         #print(state)
-        if  check_keyword(word): #Valida si esta en el diccionario de palabras claves 
+        if  check_keyword(word) or check_operators(word) : #Valida si esta en el diccionario de palabras claves 
               idk=find_id(Keywords,word)
               print("\n<",idk,">")
         
@@ -437,6 +438,9 @@ def record_table (state,ch,word):
 
 #Funcion que se encarga de mostrar el estado segun su transicion
 def record_token (state,ch,word):
+      if( state== 20 or state==23 or state== 39):
+             print("\n<",state,">")
+        
       if(state==15 or state==16 or state==17): #En dado caso que sea un estado de los aceptores de identificador, numero real o entero
             record_table (state,ch,word) #Hay que recuperar el ultimo caracter
       else:
@@ -478,7 +482,7 @@ def scanner():
 
           #print("Estado ",state,"letra ",ch)
           if state in Accept and state not in Comment:  # Verificar si el estado está en el arreglo aceptor 
-              #print("Estado ",state,"letra ",ch, "cadena de palabra \n", word)
+             #print("Estado ",state,"letra ",ch, "cadena de palabra \n", word)
               record_token(state,ch,word)
               
           elif state in Error: # Verificar si el estado está en el arreglo error

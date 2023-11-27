@@ -19,4 +19,4 @@ begin
   writeLn( ' a = ', a );
   writeLn( ' b = ', b );
 end. (* This is the end of the main
-program block )
+program block *)

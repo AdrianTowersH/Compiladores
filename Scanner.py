@@ -44,8 +44,8 @@ Operators = {
     37: ']',
     39: ':'
 }
-
-
+#Definir diccionario para los tokens
+token_list= {}
 
 # Definir un diccionario con todas las palabras claves
 Keywords = {
@@ -363,6 +363,10 @@ def show_tables():
     print("\nTabla de numeros reales\n")
     for clave_float, valor_float in Reals.items():
         print(clave_float, ":", valor_float)
+    
+    # Método 1: Utilizando un bucle for
+    for tonkenidlist,token in token_list:
+        print(token)
 
 
 
@@ -398,6 +402,8 @@ def record_table (state,ch,word):
         #print(state)
         if  check_keyword(word) or check_operators(word) : #Valida si esta en el diccionario de palabras claves 
               idk=find_id(Keywords,word)
+              print("\n<", state, ">")
+              idt=len(token_list) + 1 #Incrementamos los IDs
               print("\n<",idk,">")
         
         elif is_integer(word): #Valida si la cadena es un numero entero de ser asi lo guardamos en la tabla de enteros
@@ -405,10 +411,17 @@ def record_table (state,ch,word):
              if num not in Integers.values():
                 # Encontrar el próximo ID disponible
                 idi =max(Integers.keys(), default=0) + 1 #Incrementamos los IDs
+                token_list+=state
                 Integers[idi] = num
                 print("\n<",state,",",idi,">")   #Mostramos estado y ID
              elif num  in Integers.values(): #Si el numero ya existe no incrementamos la cadena
                    idi=find_id(Integers,num)
+
+
+                   idt=len(token_list) + 1 #Incrementamos los IDs
+                   token_list[idt]=state
+
+
                    print("\n<",state,",",idi,">")
         
         elif is_float(word): #Valida si la cadena es un numero reales de ser asi lo guardamos en la tabla de reales
@@ -416,35 +429,59 @@ def record_table (state,ch,word):
               if num not in Reals.values():
                     idf=len(Reals) + 1 #Incrementamos los IDs
                     Reals[idf] = num
+
+                    idt=len(token_list) + 1 #Incrementamos los IDs
+                    token_list[idt]=state
+
                     print("\n<",state,",",idf,">") #Mostramos estado y ID
               elif num  in Reals.values(): #Si el numero ya existe no incrementamos la cadena
                     idf=find_id(Reals,num)
+                    
                     print("\n<",state,",",idf,">")
+
+                    print("\n<", state, ">")
+                    idt=len(token_list) + 1 #Incrementamos los IDs
 
         elif not check_keyword(word) and  not check_operators(word): #Valida si la cadena no es una palabra reservada o un simbolo
             if not check_identifier(word):
                 new_id = len(Identifier) + 1 #Incrementamos los IDs en el diccionario de identificadoresZ
                 Identifier[new_id] = word
+
+                idt=len(token_list) + 1 #Incrementamos los IDs
+                token_list[idt]=state
+
                 print("\n<",state,",",new_id,">") #Mostramos estado y ID
             elif check_identifier(word):        #Si la palabra ya existe no incrementamos la cadena
                   new_id=find_id(Identifier,word)
                   print("\n<",state,",",new_id,">")
+                  
+                  idt=len(token_list) + 1 #Incrementamos los IDs
+                  token_list[idt]=state
+
        
         if ch is not None and ch not in [' ', '\n', '\r']:  # Si la letra quee sigue despues de la cadena es un operador lo recuperamos
                 state = find_id(Operators, ch)
                 if state is not None and ch not in [' ', '\n', '\r']:
                    print("\n<", state, ">")
+                   idt=len(token_list) + 1 #Incrementamos los IDs
+                   token_list[idt]=state
+
 
 
 #Funcion que se encarga de mostrar el estado segun su transicion
 def record_token (state,ch,word):
       if( state== 20 or state==23 or state== 39):
+             print("\n<", state, ">")
+             idt=len(token_list) + 1 #Incrementamos los IDs
+
              print("\n<",state,">")
         
       if(state==15 or state==16 or state==17): #En dado caso que sea un estado de los aceptores de identificador, numero real o entero
             record_table (state,ch,word) #Hay que recuperar el ultimo caracter
       else:
            if state is not None and ch not in [' ', '\n', '\r']:
+              print("\n<", state, ">")
+              idt=len(token_list) + 1 #Incrementamos los IDs
               print("\n<",state,">")
 
 
@@ -488,8 +525,164 @@ def scanner():
           elif state in Error: # Verificar si el estado está en el arreglo error
                error_message(state)               
           
-           
-          
+# Parser 
+def match(terminal_symbol):
+      print("OK")
+
+#1. start → program ID ; vars_block functions_block procedures_block begin statement_list end •
+def start(current_token):
+      print("Prueba")
+
+#2. vars_block → var ID var_list′ : type_specifier ; var_declaration′ | ε
+def vars_block(current_token):
+      print("Prueba")
+
+#3. var_declaration′ → ID var_list′ : type_specifier ; var_declaration′ |  ε
+def var_declarationPrime(current_token):
+      print("Prueba")
+
+#4. var_list′ →  , ID var_list′ |ε
+def var_listPrime(current_token):
+      print("Prueba")
+
+#5. type_specifier → integer | real | string | array [ int_number • • int_number] of basic_type
+def type_specifier(current_token):
+      print("Prueba")
+
+#6. basic_type → integer | real | string
+def basic_type(current_token):
+       if( current_token == 'integer'):
+            match('integer')
+                   
+       elif(current_token=='real'):
+             match('real')
+       elif(current_token=='string'):
+             match('string')
+       else:
+            print("Error:")
+
+#7. functions_block →   functions_block′ 
+def functions_block(current_token):
+      print("Prueba")
+
+#8. functions_block′ →  function ID( params ) : type_specifier ; local_declarations  begin statement_list end;   functions_block′ |ε
+def functions_blockPrime(current_token):
+      print("Prueba")
+
+#9. procedures_block→   procedures_block′ 
+def procedures_block(current_token):
+      print("Prueba")
+
+#10. procedures_block′ →  procedure ID( params ) ; local_declarations  begin statement_list end ;  procedures_block′ |ε
+def procedures_blockPrime(current_token):
+      print("Prueba")
+
+#11. params →  ID var_list′ : type_specifier ;  param_list′| ε
+def params(current_token):
+      print("Prueba")
+
+#12. param_list′ →  ID var_list′ : type_specifier ;  param_list′ | ε
+def param_listPrime(current_token):
+      print("Prueba")
+
+#13. local_declarations → vars_block | ε
+def local_declarations(current_token):
+      print("Prueba")
+
+#14. statement_list → statement ;   statement_list′
+def statement_list(current_token):
+      print("Prueba")
+
+#15. statement_list′→ statement ;   statement_list′ | ε
+def statement_listPrime(current_token):
+      print("Prueba")
+
+#16. statement →  ID   statement′ |  begin statement_list end| if ( logic_expression ) then statement   selection_stmt′ |  for ID := int_number to int_number do statement | repeat statement_list until ( logic_expression )| readln (  ID var_list′ ); | writeln ( , output    output_list ′);
+def statement(current_token):
+       if( current_token == 'ID'):
+            match('ID')
+                   
+       elif(current_token=='begin'):
+             match('if')
+       elif(current_token=='for'):
+             match('repeat')
+       elif(current_token=='readln'):
+             match('readln')
+       elif(current_token=='writeln'):
+             match('writeln')
+       else:
+            print("Error:")
+
+#17. statement′  → var′ :=  assignment_stmt ′ |( args ) 
+def statementPrime(current_token):
+      print("Prueba")
+
+
+#18. assignment_stmt′ →arithmetic_expression |  STRING 
+def assignment_stmtPrime(current_token):
+      print("Prueba")
+
+#19. selection_stmt′ →  ε | else statement 
+def selection_stmtPrime(current_token):
+      print("Prueba")
+
+#20 output_list′→ , output   output_list ′ | ε
+def output_listPrime(current_token):
+      print("Prueba")
+
+#21. output → arithmetic_expression | STRING
+def output(current_token):
+      print("Prueba")
+#22. var′ →  ε | [ arithmetic_expression ]
+def varPrime(current_token):
+      print("Prueba")
+#23. logic_expression → arithmetic_expression relop arithmetic_expression
+def logic_expression(current_token):
+      print("Prueba")
+#24. relop → <= | < | > | >= | = | <> 
+def relop(current_token):
+       if( current_token == '<='):
+            match('<=')
+                   
+       elif(current_token=='<'):
+             match('<')
+       elif(current_token=='>'):
+             match('>')
+       elif(current_token=='>='):
+             match('>=')
+       elif(current_token=='='):
+             match('=')
+       elif(current_token=='<>'):
+             match('<>')
+       else:
+            print("Error:")
+
+#25. arithmetic_expression → term   arithmetic_expression ′
+def arithmetic_expression(current_token):
+      print("Prueba")
+
+#26.arithmetic_expression′ → + term arithmetic_expression′ | - term   arithmetic_expression ′ | ε
+def arithmetic_expressionPrime(current_token):
+      print("Prueba")
+
+#27. term  → factor  term′
+def term(current_token):
+      print("Prueba")
+#28. term′ → * factor   term′  | / factor  term′ | ε
+def termPrime(current_token):
+      print("Prueba")
+#29. factor → ID   factor′ | real_number | int_number  |  (arithmetic_operator) 
+def factor(current_token):
+      print("Prueba")
+#30. factor′ →  ( args ) | var′ 
+def factorPrime(current_token):
+      print("Prueba")
+#31. args → arithmetic_expression   arg_list ′| ε
+def arg_listPrime(current_token):
+      print("Prueba")
+
+
+
 #Funcion main que se encarga de iniciar el scanner y depues mostrar las tablas         
 def main():
       scanner()

@@ -560,6 +560,8 @@ def scanner():
           elif state in Error: # Verificar si el estado está en el arreglo error
                error_message(state)               
           
+def match():
+        print("ok")
 
 def parser():
     
@@ -631,37 +633,58 @@ def vars_block(current_token):
 
 #3. var_declaration’ → var_list : type_specifier ; var_declaration’ | ε
 def var_declarationPrime(current_token):
+      print("ok")
       
 #4. var_list’ → , ID var_list’ | ε
 def var_listPrime(current_token):
+      print("ok")
       
 #5. type_specifier → integer | real | string | array [ NUMBER • • NUMBER ] of basic_type
 def type_specifier(current_token):
+      print("ok")
 
 #6. basic_type → integer | real | string
 def basic_type(current_token):
+       if(obtener_valor(token_list[current_token])== 'integer'):
+            match('integer')
+                   
+       elif(obtener_valor(token_list[current_token])=='real'):
+             match('real')
+       elif(obtener_valor(token_list[current_token])=='string'):
+             match('string')
+       else:
+            print("Error:")
 
 #7. functions_block → functions_block’
 def functions_block(current_token):
+      print("ok")
 
 
 #8. functions_block’ → function ID( params ) : type_specifier ; local_declarations begin statement_list end ; functions_block’ | ε
 def functions_blockPrime(current_token):
+      print("ok")
 
 #9. procedures_block → procedures_block’
 def procedures_block(current_token):
+      print("ok")
 #10. procedures_block’ → procedure ID( params ) ; local_declarations begin statement_list end ; procedures_block’ | ε
 def procedures_blockPrime(current_token):
+      print("ok")
 #11. params → ID var_list’ : type_specifier ; param_list’ | ε
 def params(current_token):
+      print("ok")
 #12. param_list’ → var_list : type_specifier ; param_list’ | ε
 def paramsPrime(current_token):
+      print("ok")
 #13. local_declarations → vars_block | ε
 def local_declarations(current_token):
+      print("ok")
 #14. statement_list → statement ; statement_list’
 def statement_list(current_token):
+      print("ok")
 #15. statement_list’ → statement ; statement_list’ | ε
 def statement_listPrime(current_token):
+      print("ok")
 #16. statement → ID statement′ | begin statement_list end| if ( logic_expression ) then statement   selection_stmt′ | for ID := NUMBER to NUMBER do statement | repeat statement_list until ( logic_expression ) | readln ( ID var_list′ ); | writeln ( output    output_list′) ;
 def statement(current_token):
         if( obtener_valor(token_list[current_token])== 'ID'):
@@ -680,36 +703,67 @@ def statement(current_token):
 
 #17. statement′ → var′ :=  assignment_stmt′ | ( args )
 def statementPrime(current_token):
+      print("ok")
 #18. assignment_stmt’ → arithmetic_expression | STRING
 def assignment_stmtPrime(current_token):
+      print("ok")
 #19. selection_stmt’ → else statement | ε
 def selection_stmtPrime(current_token):
+      print("ok")
 #20. output_list’ → , output output_list’ | ε
 def output_listPrime(current_token):
+      print("ok")
 #21. output → arithmetic_expression | STRING | ε
 def output(current_token):
+      print("ok")
 #22. var′ → [ arithmetic_expression ] | ε
 def varPrime(current_token):
+      print("ok")
 #23. logic_expression → arithmetic_expression relop arithmetic_expression
 def logic_expression(current_token):
+      print("ok")
 #24. relop → <= | < | > | >= | == | !=
 def relop(current_token):
+       if( current_token == '<='):
+            match('<=')
+                   
+       elif(obtener_valor(token_list[current_token])=='<'):
+             match('<')
+       elif(obtener_valor(token_list[current_token])=='>'):
+             match('>')
+       elif(obtener_valor(token_list[current_token])=='>='):
+             match('>=')
+       elif(obtener_valor(token_list[current_token])=='='):
+             match('=')
+       elif(obtener_valor(token_list[current_token])=='<>'):
+             match('<>')
+       else:
+            print("Error:")
+
 #25. arithmetic_expression → term   arithmetic_expression’
 def arithmetic_expression(current_token):
+      print("ok")
 #26. arithmetic_expression’ → + term arithmetic_expression’| - term arithmetic_expression’| ε
 def arithmetic_expressionPrime(current_token):
+        print("ok")
 #27. term → factor term’
 def term(current_token):
+      print("ok")
 #28. term’ → * factor   term’ | / factor  term’ | ε
 def termPrime(current_token):
+      print("ok")
 #29. factor → ID factor′ | NUMBER  |  (arithmetic_operator)
 def factor(current_token):
+      print("ok")
 #30. factor′ → ( args ) | var′
 def factorPrime(current_token):
+      print("ok")
 #31. args → arithmetic_expression arg_list’ | ε
 def args(current_token):
+      print("ok")
 #32. arg_list’ → , arithmetic_expression arg_list’ | ε
 def  arg_listPrime(current_token):
+      print("ok")
 
 
             

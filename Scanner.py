@@ -21,6 +21,9 @@ Integers = {}
 #Definir diccionario para numeros reales
 Reals = {}
 
+# Declarar una lista global
+token_list = []
+
 # Definir un diccionario con todos los operadores
 Operators = {
     18: '(',
@@ -45,6 +48,52 @@ Operators = {
     39: ':'
 }
 
+Union={
+    15:'ID',
+    16:'int_number',
+    17:'real_number',
+    18: '(',
+    20: '<',
+    21: '<=',
+    22: '<>',
+    23: '>',
+    24: '>=',
+    25: ':=',
+    26: '+',
+    27: '-',
+    28: '*',
+    29: '/',
+    30: '=',
+    31: ';',
+    32: ',',
+    33: "'", 
+    34: '.',
+    35: ')',
+    36: '[',
+    37: ']',
+    39: ':',
+    44: 'program',
+    45: 'procedure',
+    46: 'function',
+    47: 'begin',
+    48: 'end',
+    49: 'var',
+    50: 'integer',
+    51: 'real',
+    52: 'string',
+    53: 'array',
+    54: 'of',
+    55: 'if',
+    56: 'then',
+    57: 'else',
+    58: 'repeat',
+    59: 'until',
+    60: 'for',
+    61: 'to',
+    62: 'do',
+    63: 'readLn',
+    64: 'writeLn'
+}
 
 
 # Definir un diccionario con todas las palabras claves
@@ -106,6 +155,17 @@ def is_float(word):
         return False
 
 
+# Función para agregar  la sequencia de tokens
+def agregar_token(token_id):
+    global token_list
+    token_list.append(token_id)
+
+def obtener_valor(numero):
+    # Verificar si el número está en el diccionario
+    if numero in Union:
+        return Union[numero]
+    else:
+        return f"No hay valor asociado al {numero}"
 
 #Funcion que checa que retorna el identificador del diccionario de identificadores
 def check_identifier(word):
@@ -366,6 +426,8 @@ def show_tables():
 
 
 
+
+
 #Función que añade la ultima letra a la palabra iterada
 def complete_string(state,word):
         if( state== 21):
@@ -399,6 +461,7 @@ def record_table (state,ch,word):
         if  check_keyword(word) or check_operators(word) : #Valida si esta en el diccionario de palabras claves 
               idk=find_id(Keywords,word)
               print("\n<",idk,">")
+              agregar_token(idk)
         
         elif is_integer(word): #Valida si la cadena es un numero entero de ser asi lo guardamos en la tabla de enteros
              num = int(word)
@@ -407,9 +470,11 @@ def record_table (state,ch,word):
                 idi =max(Integers.keys(), default=0) + 1 #Incrementamos los IDs
                 Integers[idi] = num
                 print("\n<",state,",",idi,">")   #Mostramos estado y ID
+                agregar_token(state)
              elif num  in Integers.values(): #Si el numero ya existe no incrementamos la cadena
                    idi=find_id(Integers,num)
                    print("\n<",state,",",idi,">")
+                   agregar_token(state)
         
         elif is_float(word): #Valida si la cadena es un numero reales de ser asi lo guardamos en la tabla de reales
               num = float(word)
@@ -417,35 +482,42 @@ def record_table (state,ch,word):
                     idf=len(Reals) + 1 #Incrementamos los IDs
                     Reals[idf] = num
                     print("\n<",state,",",idf,">") #Mostramos estado y ID
+                    agregar_token(state)
               elif num  in Reals.values(): #Si el numero ya existe no incrementamos la cadena
                     idf=find_id(Reals,num)
                     print("\n<",state,",",idf,">")
+                    agregar_token(state)
 
         elif not check_keyword(word) and  not check_operators(word): #Valida si la cadena no es una palabra reservada o un simbolo
             if not check_identifier(word):
                 new_id = len(Identifier) + 1 #Incrementamos los IDs en el diccionario de identificadoresZ
                 Identifier[new_id] = word
                 print("\n<",state,",",new_id,">") #Mostramos estado y ID
+                agregar_token(state)
             elif check_identifier(word):        #Si la palabra ya existe no incrementamos la cadena
                   new_id=find_id(Identifier,word)
                   print("\n<",state,",",new_id,">")
+                  agregar_token(state)
        
         if ch is not None and ch not in [' ', '\n', '\r']:  # Si la letra quee sigue despues de la cadena es un operador lo recuperamos
                 state = find_id(Operators, ch)
                 if state is not None and ch not in [' ', '\n', '\r']:
                    print("\n<", state, ">")
+                   agregar_token(state)
 
 
 #Funcion que se encarga de mostrar el estado segun su transicion
 def record_token (state,ch,word):
       if( state== 20 or state==23 or state== 39):
              print("\n<",state,">")
+             agregar_token(state)
         
       if(state==15 or state==16 or state==17): #En dado caso que sea un estado de los aceptores de identificador, numero real o entero
             record_table (state,ch,word) #Hay que recuperar el ultimo caracter
       else:
            if state is not None and ch not in [' ', '\n', '\r']:
               print("\n<",state,">")
+              agregar_token(state)
 
 
 
@@ -488,13 +560,149 @@ def scanner():
           elif state in Error: # Verificar si el estado está en el arreglo error
                error_message(state)               
           
-           
+
+def parser():
+    
+    agregar_token('$')
+    current_token=1
+    start(current_token)
+
+    if(token_list[current_token]=='$'):
+          print("\nSystax Analisis corrected")
+    else:
+          print("\nError: Systax Analisis")
+          sys.exit()
+    
+    """
+    print("\nSequencia de tokens\n")
+    for i in token_list:
+        print(i)"""
+
+
+#1. start → program ID ; vars_block functions_block procedures_block begin statement_list end •
+def start(current_token):
+      if(obtener_valor(token_list[current_token])=='program'):
+            current_token=current_token+1
+            if(obtener_valor(token_list[current_token])=='ID'):
+                  current_token=current_token+1
+                  vars_block(current_token)
+                  procedures_block(current_token)
+                  if(obtener_valor(token_list[current_token])=='begin'):
+                        current_token=current_token+1
+                        statement_list(current_token)
+                        if(obtener_valor(token_list[current_token])=='end'):
+                              current_token=current_token+1
+                              if(obtener_valor(token_list[current_token])=='.'):
+                                    print("Alles gut mit start")
+
+                        else:
+                               print("end")    
+                              
+                  else:
+                     print("No hay ID")
+
+
+            else:
+                   print("Error: No hay ID")             
+                  
+      else:
+            print("Error: No hay program")
+
+
+#2. vars_block → var ID var_list’ : type_specifier ; var_declaration’ | ε
+def vars_block(current_token):
+       if(obtener_valor(token_list[current_token])=='var'):
+               current_token=current_token+1
+               var_listPrime(current_token)
+               if(obtener_valor(token_list[current_token])==':'):
+
+               
+             
+       else:
+           print("Error: No hay var")
+      
+
+#3. var_declaration’ → var_list : type_specifier ; var_declaration’ | ε
+def var_declarationPrime(current_token):
+      
+#4. var_list’ → , ID var_list’ | ε
+def var_listPrime(current_token):
+      
+#5. type_specifier → integer | real | string | array [ NUMBER • • NUMBER ] of basic_type
+def type_specifier(current_token):
+
+#6. basic_type → integer | real | string
+def basic_type(current_token):
+
+#7. functions_block → functions_block’
+def functions_block(current_token):
+
+
+#8. functions_block’ → function ID( params ) : type_specifier ; local_declarations begin statement_list end ; functions_block’ | ε
+def functions_blockPrime(current_token):
+
+#9. procedures_block → procedures_block’
+def procedures_block(current_token):
+#10. procedures_block’ → procedure ID( params ) ; local_declarations begin statement_list end ; procedures_block’ | ε
+def procedures_blockPrime(current_token):
+#11. params → ID var_list’ : type_specifier ; param_list’ | ε
+def params(current_token):
+#12. param_list’ → var_list : type_specifier ; param_list’ | ε
+def paramsPrime(current_token):
+#13. local_declarations → vars_block | ε
+def local_declarations(current_token):
+#14. statement_list → statement ; statement_list’
+def statement_list(current_token):
+#15. statement_list’ → statement ; statement_list’ | ε
+def statement_listPrime(current_token):
+#16. statement → ID statement′ | begin statement_list end| if ( logic_expression ) then statement   selection_stmt′ | for ID := NUMBER to NUMBER do statement | repeat statement_list until ( logic_expression ) | readln ( ID var_list′ ); | writeln ( output    output_list′) ;
+def statement(current_token):
+#17. statement′ → var′ :=  assignment_stmt′ | ( args )
+def statementPrime(current_token):
+#18. assignment_stmt’ → arithmetic_expression | STRING
+def assignment_stmtPrime(current_token):
+#19. selection_stmt’ → else statement | ε
+def selection_stmtPrime(current_token):
+#20. output_list’ → , output output_list’ | ε
+def output_listPrime(current_token):
+#21. output → arithmetic_expression | STRING | ε
+def output(current_token):
+#22. var′ → [ arithmetic_expression ] | ε
+def varPrime(current_token):
+#23. logic_expression → arithmetic_expression relop arithmetic_expression
+def logic_expression(current_token):
+#24. relop → <= | < | > | >= | == | !=
+def relop(current_token):
+#25. arithmetic_expression → term   arithmetic_expression’
+def arithmetic_expression(current_token):
+#26. arithmetic_expression’ → + term arithmetic_expression’| - term arithmetic_expression’| ε
+def arithmetic_expressionPrime(current_token):
+#27. term → factor term’
+def term(current_token):
+#28. term’ → * factor   term’ | / factor  term’ | ε
+def termPrime(current_token):
+#29. factor → ID factor′ | NUMBER  |  (arithmetic_operator)
+def factor(current_token):
+#30. factor′ → ( args ) | var′
+def factorPrime(current_token):
+#31. args → arithmetic_expression arg_list’ | ε
+def args(current_token):
+#32. arg_list’ → , arithmetic_expression arg_list’ | ε
+def  arg_listPrime(current_token):
+
+
+            
+
+
           
 #Funcion main que se encarga de iniciar el scanner y depues mostrar las tablas         
 def main():
       scanner()
-      show_tables()     
+      show_tables() 
+      parser()    
 
 main()       
+
+
 
 
